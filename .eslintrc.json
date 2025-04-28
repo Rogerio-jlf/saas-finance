@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "next/core-web-vitals", // Configurações específicas do Next.js
+    "plugin:@typescript-eslint/recommended" // Regras do TypeScript
+  ],
+  "parser": "@typescript-eslint/parser", // Usado para analisar TypeScript
+  "plugins": ["@typescript-eslint"], // Plugin do TypeScript
+  "rules": {
+    "no-console": "warn", // Alerta para o uso de console
+    "no-unused-vars": "warn", // Alerta para variáveis não usadas
+    "semi": ["error", "always"] // Exige ponto e vírgula no final das linhas
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off" // Permite o uso de "any" sem erro
+      }
+    }
+  ]
+}

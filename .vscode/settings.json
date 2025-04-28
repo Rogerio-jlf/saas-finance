@@ -1,0 +1,19 @@
+{
+  "postman.settings.dotenv-detection-notification-visibility": false,
+
+  "editor.formatOnSave": true, // Formata o arquivo ao salvar
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit", // Corrige todos os erros do ESLint ao salvar
+    "source.organizeImports": "explicit" // Organiza os imports automaticamente
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // Usa Prettier como formatador principal
+  "typescript.preferences.importModuleSpecifier": "non-relative", // Prefere imports absolutos se configurado
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"], // ESLint ativa em JS/TS/TSX
+  "files.exclude": {
+    "**/.next": true, // Esconde a pasta .next no Explorer
+    "**/node_modules": true // Esconde node_modules
+  },
+  "editor.tabSize": 2, // Tamanho da indentação
+  "editor.wordWrap": "on", // Quebra de linha automática
+  "prettier.requireConfig": true // Só formata se encontrar um .prettierrc
+}
