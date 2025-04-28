@@ -1,8 +1,10 @@
+import LoginPage from '@/app/(main)/login/page';
+
 const HomePage = () => {
   return (
     <>
       <div>
-        <h1>Página Home</h1>
+        <LoginPage />
       </div>
     </>
   );
