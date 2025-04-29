@@ -136,11 +136,11 @@ const ResetPasswordForm = () => {
       {/* Card principal */}
       <div className="w-full max-w-md overflow-hidden rounded-2xl bg-[rgba(15,10,20,0.8)] shadow-2xl backdrop-blur-xl">
         {/* Cabeçalho com gradiente */}
-        <div className="bg-gradient-to-r from-[#8a35d7] to-[#c861ff] p-8 text-center">
+        <div className="bg-gradient-to-r from-[#434483] to-[#0e0385] p-8 text-center">
           <SiWebmoney className="mx-auto h-16 w-16" />
           <h2 className="mt-4 text-3xl font-bold">Finan Flow</h2>
           <p className="mt-2 text-sm font-light text-[#f2e9fa]">
-            Redefinição de senha
+            Redefina sua senha
           </p>
         </div>
 
@@ -371,7 +371,7 @@ const ResetPasswordForm = () => {
               {/* Botão de Redefinir Senha */}
               <button
                 type="submit"
-                className="group relative mt-6 h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#a240ff] to-[#b562ff] font-medium text-white shadow-lg transition-all hover:shadow-xl"
+                className="group relative mt-6 h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#09043f] to-[#2e308d] font-medium text-white shadow-lg transition-all hover:shadow-xl"
                 disabled={
                   !passwordsMatch ||
                   passwordStrength.score < 2 ||

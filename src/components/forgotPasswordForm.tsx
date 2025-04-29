@@ -32,11 +32,11 @@ const ForgotPasswordForm = () => {
       {/* Card principal */}
       <div className="w-full max-w-md overflow-hidden rounded-2xl bg-[rgba(15,10,20,0.8)] shadow-2xl backdrop-blur-xl">
         {/* Cabeçalho com gradiente */}
-        <div className="bg-gradient-to-r from-[#8a35d7] to-[#c861ff] p-8 text-center">
+        <div className="bg-gradient-to-r from-[#865c44] to-[#861f03] p-8 text-center">
           <SiWebmoney className="mx-auto h-16 w-16" />
           <h2 className="mt-4 text-3xl font-bold">Finan Flow</h2>
           <p className="mt-2 text-sm font-light text-[#f2e9fa]">
-            Recuperação de senha
+            Recupere sua senha
           </p>
         </div>
 
@@ -64,10 +64,10 @@ const ForgotPasswordForm = () => {
                     onChange={handleEmailChange}
                     className={`peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pb-2 text-[#f9f8fa] transition-all outline-none ${
                       isValidEmail === null
-                        ? 'focus:border-[#a240ff]'
+                        ? 'focus:ring-2 focus:ring-[#a240ff]'
                         : isValidEmail
-                          ? 'border-green-500'
-                          : 'border-red-500'
+                          ? 'border-green-500 focus:ring-2 focus:ring-green-500'
+                          : 'border-red-500 focus:ring-2 focus:ring-red-500'
                     }`}
                     placeholder=" "
                     id="email-input"
@@ -97,7 +97,7 @@ const ForgotPasswordForm = () => {
                 <button
                   type="submit"
                   disabled={!isValidEmail}
-                  className="group relative h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#a240ff] to-[#b562ff] font-medium text-white shadow-lg transition-all hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+                  className="group relative h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#3e1105] to-[#86411a] font-medium text-white shadow-lg transition-all hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <span className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:translate-x-[-8px]">
                     Enviar instruções
