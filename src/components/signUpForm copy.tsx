@@ -1,9 +1,7 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import {
   FaArrowRight,
   FaCheckCircle,
@@ -12,10 +10,14 @@ import {
   FaTimesCircle,
 } from 'react-icons/fa';
 import { SiWebmoney } from 'react-icons/si';
-import { signUpSchema, SignUpSchema } from '../schemas/signUpSchema';
 import '../styles/general.css';
 
 const SignUpForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -36,33 +38,14 @@ const SignUpForm = () => {
     label: '',
   });
 
-  // Hook para gerenciar o formulário
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<SignUpSchema>({
-    resolver: zodResolver(signUpSchema),
-  });
-
-  const nameValue = watch('name');
-  const emailValue = watch('email');
-  const isValidEmailValue = emailValue
-    ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(emailValue)
-    : null;
-  const passwordValue = watch('password') || '';
-  const confirmPasswordValue = watch('confirmPassword') || '';
-
   useEffect(() => {
     // Verifica cada requisito
     const updatedRequirements = {
-      hasMinLength: passwordValue.length >= 8,
-      hasUpperCase: /[A-Z]/.test(passwordValue),
-      hasLowerCase: /[a-z]/.test(passwordValue),
-      hasNumber: /[0-9]/.test(passwordValue),
-      hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue),
+      hasMinLength: password.length >= 8,
+      hasUpperCase: /[A-Z]/.test(password),
+      hasLowerCase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
     };
 
     setPasswordRequirements(updatedRequirements);
@@ -74,7 +57,7 @@ const SignUpForm = () => {
     let strengthScore = 0;
     let strengthLabel = '';
 
-    if (passwordValue.length === 0) {
+    if (password.length === 0) {
       strengthScore = 0;
       strengthLabel = '';
     } else if (completedRequirements === 1) {
@@ -97,10 +80,32 @@ const SignUpForm = () => {
     });
 
     // Verifica se as senhas coincidem
-    if (confirmPasswordValue) {
-      setPasswordsMatch(passwordValue === confirmPasswordValue);
+    if (confirmPassword) {
+      setPasswordsMatch(password === confirmPassword);
     }
-  }, [passwordValue, confirmPasswordValue]);
+  }, [password, confirmPassword]);
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/;
+    setIsValidEmail(pattern.test(value));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setConfirmPassword(e.target.value);
+  };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -126,37 +131,6 @@ const SignUpForm = () => {
     }
   };
 
-  const [output, setOutput] = useState('');
-
-  const createUser = (data: SignUpSchema) => {
-    console.log('Form data:', data);
-    setOutput(JSON.stringify(data, null, 2));
-  };
-
-  function capitalizeWords(
-    e: React.ChangeEvent<HTMLInputElement>,
-    setValue: (
-      name: keyof SignUpSchema,
-      value: string,
-      options?: { shouldValidate?: boolean },
-    ) => void,
-  ) {
-    const words = e.target.value.split(' ');
-    const lowerCaseWords = ['e', 'da', 'das', 'de', 'di', 'do', 'dos'];
-
-    for (let i = 0; i < words.length; i++) {
-      const word = words[i].toLowerCase();
-      if (lowerCaseWords.includes(word) && i !== 0) {
-        words[i] = word;
-      } else {
-        words[i] = word.charAt(0).toUpperCase() + word.slice(1);
-      }
-    }
-
-    const capitalized = words.join(' ');
-    setValue('name', capitalized, { shouldValidate: true });
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#1e142c] to-[#2d1a3f] font-sans text-[#f9f8fa]">
       {/* Card principal */}
@@ -172,20 +146,14 @@ const SignUpForm = () => {
 
         {/* Formulário */}
         <div className="p-8">
-          <form
-            onSubmit={handleSubmit((data) => {
-              console.log('Submitting form...');
-              createUser(data);
-            })}
-            className="space-y-5"
-          >
+          <form className="space-y-5">
             {/* Nome */}
             <div className="relative">
               <input
                 required
                 type="text"
-                {...register('name')}
-                onChange={(e) => capitalizeWords(e, setValue)}
+                value={name}
+                onChange={handleNameChange}
                 className="peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pb-2 text-[#f9f8fa] transition-all outline-none focus:border-[#a240ff]"
                 placeholder=" "
                 id="name-input"
@@ -193,18 +161,13 @@ const SignUpForm = () => {
               <label
                 htmlFor="name-input"
                 className={`absolute left-4 text-[#a392b3] transition-all ${
-                  nameValue
+                  name
                     ? 'top-2 text-xs'
                     : 'top-1/2 -translate-y-1/2 text-base peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs'
                 }`}
               >
                 Nome completo
               </label>
-              {errors.name && (
-                <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
-                  {errors.name.message}
-                </span>
-              )}
             </div>
 
             {/* Email */}
@@ -212,11 +175,12 @@ const SignUpForm = () => {
               <input
                 required
                 type="text"
-                {...register('email')}
+                value={email}
+                onChange={handleEmailChange}
                 className={`peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pb-2 text-[#f9f8fa] transition-all outline-none ${
-                  isValidEmailValue === null
+                  isValidEmail === null
                     ? 'focus:ring-2 focus:ring-[#a240ff]'
-                    : isValidEmailValue
+                    : isValidEmail
                       ? 'border-green-500 focus:ring-2 focus:ring-green-500'
                       : 'border-red-500 focus:ring-2 focus:ring-red-500'
                 }`}
@@ -226,41 +190,36 @@ const SignUpForm = () => {
               <label
                 htmlFor="email-input"
                 className={`absolute left-4 text-[#a392b3] transition-all ${
-                  emailValue
+                  email
                     ? 'top-2 text-xs'
                     : 'top-1/2 -translate-y-1/2 text-base peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs'
                 }`}
               >
                 Email
               </label>
-              {isValidEmailValue !== null && (
+              {isValidEmail !== null && (
                 <span className="absolute top-1/2 right-4 -translate-y-1/2">
-                  {isValidEmailValue ? (
+                  {isValidEmail ? (
                     <FaCheckCircle className="h-5 w-5 text-green-500" />
                   ) : (
                     <FaTimesCircle className="h-5 w-5 text-red-500" />
                   )}
                 </span>
               )}
-              {errors.email && (
-                <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
-                  {errors.email.message}
-                </span>
-              )}
             </div>
 
-            {/* Password */}
             {/* Senha com requisitos e barra de força */}
             <div className="space-y-2">
               <div className="relative">
                 <input
                   required
                   type={showPassword ? 'text' : 'password'}
-                  {...register('password')}
+                  value={password}
+                  onChange={handlePasswordChange}
                   onFocus={() => setPasswordFocused(true)}
                   onBlur={() => {
                     // Mantém os requisitos visíveis se houver algum texto digitado
-                    if (!passwordValue) {
+                    if (!password) {
                       setPasswordFocused(false);
                     }
                   }}
@@ -271,7 +230,7 @@ const SignUpForm = () => {
                 <label
                   htmlFor="password-input"
                   className={`absolute left-4 text-[#a392b3] transition-all ${
-                    passwordValue
+                    password
                       ? 'top-2 text-xs'
                       : 'top-1/2 -translate-y-1/2 text-base peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs'
                   }`}
@@ -292,7 +251,7 @@ const SignUpForm = () => {
               </div>
 
               {/* Barra de força da senha */}
-              {passwordValue && (
+              {password && (
                 <div className="space-y-1">
                   <div className="h-1 w-full overflow-hidden rounded-full bg-[#251930]">
                     <div
@@ -312,7 +271,7 @@ const SignUpForm = () => {
               )}
 
               {/* Requisitos da senha */}
-              {(passwordFocused || passwordValue) && (
+              {(passwordFocused || password) && (
                 <div className="mt-2 rounded-lg bg-[#251930] p-3">
                   <p className="mb-2 text-xs text-[#a392b3]">
                     A senha deve conter:
@@ -401,11 +360,6 @@ const SignUpForm = () => {
                   </ul>
                 </div>
               )}
-              {errors.password && (
-                <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
-                  {errors.password.message}
-                </span>
-              )}
             </div>
 
             {/* Confirmar Senha */}
@@ -413,9 +367,10 @@ const SignUpForm = () => {
               <input
                 required
                 type={showConfirmPassword ? 'text' : 'password'}
-                {...register('confirmPassword')}
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
                 className={`peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pr-12 pb-2 text-[#f9f8fa] transition-all outline-none ${
-                  passwordsMatch === null || !confirmPasswordValue
+                  passwordsMatch === null || !confirmPassword
                     ? 'focus:border-[#a240ff]'
                     : passwordsMatch
                       ? 'border-green-500'
@@ -427,7 +382,7 @@ const SignUpForm = () => {
               <label
                 htmlFor="confirm-password-input"
                 className={`absolute left-4 text-[#a392b3] transition-all ${
-                  confirmPasswordValue
+                  confirmPassword
                     ? 'top-2 text-xs'
                     : 'top-1/2 -translate-y-1/2 text-base peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs'
                 }`}
@@ -445,18 +400,13 @@ const SignUpForm = () => {
                   <FaEye className="h-5 w-5" />
                 )}
               </button>
-              {passwordsMatch !== null && confirmPasswordValue && (
+              {passwordsMatch !== null && confirmPassword && (
                 <span className="absolute top-1/2 right-12 -translate-y-1/2">
                   {passwordsMatch ? (
                     <FaCheckCircle className="h-5 w-5 text-green-500" />
                   ) : (
                     <FaTimesCircle className="h-5 w-5 text-red-500" />
                   )}
-                </span>
-              )}
-              {errors.confirmPassword && (
-                <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
-                  {errors.confirmPassword.message}
                 </span>
               )}
             </div>
@@ -466,7 +416,6 @@ const SignUpForm = () => {
               <input
                 type="checkbox"
                 id="privacy-policy"
-                {...register('acceptedTerms')}
                 className="mt-1 h-4 w-4 rounded border-[#a392b3] bg-[#251930] text-[#a240ff] focus:ring-[#a240ff]"
               />
               <label
@@ -482,31 +431,22 @@ const SignUpForm = () => {
                   Política de Privacidade
                 </Link>
               </label>
-              {errors.acceptedTerms && (
-                <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
-                  {errors.acceptedTerms.message}
-                </span>
-              )}
             </div>
 
             {/* Botão de Cadastro */}
             <button
               type="submit"
-              className="group relative mt-4 h-14 w-full cursor-pointer overflow-hidden rounded-lg bg-gradient-to-r from-[#033e25] to-[#2da21e] font-medium text-white shadow-lg transition-all hover:shadow-xl"
-              disabled={isSubmitting}
+              className="group relative mt-4 h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#033e25] to-[#2da21e] font-medium text-white shadow-lg transition-all hover:shadow-xl"
+              disabled={
+                !isValidEmail || !passwordsMatch || passwordStrength.score < 2
+              }
             >
               <span className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:translate-x-[-8px]">
-                {isSubmitting ? 'Criando...' : 'Criar conta'}
+                Criar conta
                 <FaArrowRight className="ml-2 opacity-0 transition-all duration-300 group-hover:translate-x-4 group-hover:opacity-100" />
               </span>
             </button>
           </form>
-
-          {output && (
-            <pre className="mt-4 max-w-md overflow-x-auto rounded bg-[#1f1b2c] p-4 text-sm text-white">
-              {output}
-            </pre>
-          )}
 
           {/* Linha separadora */}
           <div className="my-6 flex items-center">
