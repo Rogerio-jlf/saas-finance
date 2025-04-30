@@ -1,4 +1,3 @@
-// components/PasswordInputs.tsx
 import {
   Tooltip,
   TooltipContent,
@@ -301,18 +300,27 @@ export function PasswordInputs({
         >
           Confirmar senha
         </label>
-        <button
-          type="button"
-          onClick={toggleShowConfirmPassword}
-          tabIndex={-1}
-          className="absolute top-1/2 right-4 -translate-y-1/2 text-[#a392b3] transition-colors hover:text-[#f9f8fa]"
-        >
-          {showConfirmPassword ? (
-            <FaEyeSlash className="h-5 w-5" />
-          ) : (
-            <FaEye className="h-5 w-5" />
-          )}
-        </button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={toggleShowConfirmPassword}
+                tabIndex={-1}
+                className="absolute top-1/2 right-4 -translate-y-1/2 text-[#a392b3] transition-colors hover:text-[#f9f8fa]"
+              >
+                {showConfirmPassword ? (
+                  <FaEyeSlash className="h-5 w-5" />
+                ) : (
+                  <FaEye className="h-5 w-5" />
+                )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{showPassword ? 'Ocultar senha' : 'Mostrar senha'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         {passwordsMatch !== null && confirmPasswordValue && (
           <span className="absolute top-1/2 right-12 -translate-y-1/2">
             {passwordsMatch ? (

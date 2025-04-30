@@ -1,0 +1,12 @@
+### Criar novo usuário
+POST http://localhost:3000/api/createUser
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "joao@email",
+  "password": "Rjlf9184@",
+  "confirmPassword": "Rjlf9184@@",
+  "acceptedTerms": true
+}
+###

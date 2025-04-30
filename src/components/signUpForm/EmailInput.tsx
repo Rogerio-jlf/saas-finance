@@ -1,4 +1,3 @@
-// components/EmailInput.tsx
 import { UseFormRegister } from 'react-hook-form';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { SignUpSchema } from '../../schemas/signUpSchema';

@@ -1,8 +1,13 @@
-// components/NameInput.tsx
-// import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+/**
+ * Componente personalizado para entrada de nome com capitalização automática
+ * @param register - Função de registro do react-hook-form
+ * @param setValue - Função para definir valores do formulário
+ * @param value - Valor atual do campo
+ * @param error - Mensagem de erro (opcional)
+ */
+
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { SignUpSchema } from '../../schemas/signUpSchema';
-
 interface NameInputProps {
   register: UseFormRegister<SignUpSchema>;
   setValue: UseFormSetValue<SignUpSchema>;

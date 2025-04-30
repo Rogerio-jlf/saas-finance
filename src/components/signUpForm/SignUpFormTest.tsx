@@ -1,4 +1,3 @@
-// SignUpForm.tsx
 'use client';
 
 import { CardHeader } from '@/components/signUpForm/CardHeader';
@@ -44,9 +43,10 @@ const SignUpForm = () => {
       {/* Card */}
       <div className="w-full max-w-md overflow-hidden rounded-2xl bg-[rgba(15,10,20,0.8)] shadow-2xl backdrop-blur-xl">
         {/* Cabeçalho do Card */}
+
         <CardHeader
           title="Crie sua conta"
-          subtitle="Aproveite todos os benefícios do nosso sistema!"
+          subtitle="Aproveite todos os benefícios do nosso sistema"
         />
 
         {/* Formulário */}

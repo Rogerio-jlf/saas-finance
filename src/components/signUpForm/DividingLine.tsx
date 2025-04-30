@@ -1,4 +1,3 @@
-// components/FormDivider.tsx
 interface FormDividerProps {
   text?: string;
 }
