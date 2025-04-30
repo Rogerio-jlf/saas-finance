@@ -1,5 +1,5 @@
 ### Criar novo usuário
-POST http://localhost:3000/api/createUser
+POST http://localhost:3000/api/users/createUser
 Content-Type: application/json
 
 {

@@ -1,7 +1,7 @@
 import { createUserSchema } from '@/schemas/userSchema';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
-import { prismaDatabase } from '../../../lib/prisma';
+import { prismaDatabase } from '../../../../lib/prisma';
 
 export async function POST(request: Request) {
   try {
