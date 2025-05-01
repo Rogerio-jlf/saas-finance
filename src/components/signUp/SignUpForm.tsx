@@ -1,18 +1,18 @@
 'use client';
 
-import { CardHeader } from '@/components/signUpForm/CardHeader';
-import { DividingLine } from '@/components/signUpForm/DividingLine';
-import { SubmitButton } from '@/components/signUpForm/SubmitButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { signUpSchema, SignUpSchema } from '../../schemas/signUpSchema';
 import '../../styles/general.css';
+import { CardHeader } from './CardHeader';
+import { DividingLine } from './DividingLine';
 import { EmailInput } from './EmailInput';
 import { NameInput } from './NameInput';
 import { PasswordInputs } from './PasswordInputs';
 import { PrivacyPolicyCheckbox } from './PrivacyPolicyCheckBox';
+import { SubmitButton } from './SubmitButton';
 
 const SignUpForm = () => {
   const [output, setOutput] = useState('');
