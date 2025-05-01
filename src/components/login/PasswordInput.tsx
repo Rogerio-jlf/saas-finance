@@ -12,30 +12,23 @@ import {
   FaEyeSlash,
   FaTimesCircle,
 } from 'react-icons/fa';
-import { TypeSignUpFormSchema } from '../../schemas/signUpFormSchema';
+import { TypeLoginFormSchema } from '../../schemas/loginFormSchema';
 
-interface PasswordInputsProps {
-  register: UseFormRegister<TypeSignUpFormSchema>;
-  watch: UseFormWatch<TypeSignUpFormSchema>;
+interface PasswordInputProps {
+  register: UseFormRegister<TypeLoginFormSchema>;
+  watch: UseFormWatch<TypeLoginFormSchema>;
   passwordError?: string;
-  confirmPasswordError?: string;
 }
 
-export function PasswordInputs({
+export function PasswordInput({
   register,
   watch,
   passwordError,
-  confirmPasswordError,
-}: PasswordInputsProps) {
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
   const passwordValue = watch('password') || '';
-  const confirmPasswordValue = watch('confirmPassword') || '';
-  const passwordsMatch = confirmPasswordValue
-    ? passwordValue === confirmPasswordValue
-    : null;
 
   const [passwordRequirements, setPasswordRequirements] = useState({
     hasMinLength: false,
@@ -45,29 +38,7 @@ export function PasswordInputs({
     hasSpecial: false,
   });
 
-  const [passwordStrength, setPasswordStrength] = useState({
-    score: 0,
-    label: '',
-  });
-
   const toggleShowPassword = () => setShowPassword(!showPassword);
-  const toggleShowConfirmPassword = () =>
-    setShowConfirmPassword(!showConfirmPassword);
-
-  const getStrengthColor = () => {
-    switch (passwordStrength.score) {
-      case 1:
-        return 'bg-red-500';
-      case 2:
-        return 'bg-yellow-500';
-      case 3:
-        return 'bg-green-500';
-      case 4:
-        return 'bg-blue-500';
-      default:
-        return 'bg-gray-300';
-    }
-  };
 
   // Atualiza os requisitos e força da senha sempre que a senha muda
   useEffect(() => {
@@ -80,33 +51,6 @@ export function PasswordInputs({
     };
 
     setPasswordRequirements(updatedRequirements);
-
-    const completedRequirements =
-      Object.values(updatedRequirements).filter(Boolean).length;
-    let strengthScore = 0;
-    let strengthLabel = '';
-
-    if (passwordValue.length === 0) {
-      strengthScore = 0;
-      strengthLabel = '';
-    } else if (completedRequirements === 1) {
-      strengthScore = 1;
-      strengthLabel = 'Fraca';
-    } else if (completedRequirements === 2 || completedRequirements === 3) {
-      strengthScore = 2;
-      strengthLabel = 'Média';
-    } else if (completedRequirements === 4) {
-      strengthScore = 3;
-      strengthLabel = 'Forte';
-    } else if (completedRequirements === 5) {
-      strengthScore = 4;
-      strengthLabel = 'Muito forte';
-    }
-
-    setPasswordStrength({
-      score: strengthScore,
-      label: strengthLabel,
-    });
   }, [passwordValue]);
 
   return (
@@ -161,25 +105,6 @@ export function PasswordInputs({
             </Tooltip>
           </TooltipProvider>
         </div>
-
-        {/* Barra de força da senha */}
-        {passwordValue && (
-          <div className="space-y-1">
-            <div className="h-1 w-full overflow-hidden rounded-full bg-[#251930]">
-              <div
-                className={`h-full transition-all ${getStrengthColor()}`}
-                style={{
-                  width: `${(passwordStrength.score / 4) * 100}%`,
-                }}
-              ></div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-[#a392b3]">
-                {passwordStrength.label && `Senha: ${passwordStrength.label}`}
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* Requisitos da senha */}
         {(passwordFocused || passwordValue) && (
@@ -271,69 +196,6 @@ export function PasswordInputs({
         )}
         {passwordError && (
           <span className="text-xs text-red-500">{passwordError}</span>
-        )}
-      </div>
-
-      {/* Campo de Confirmar Senha */}
-      <div className="relative">
-        <input
-          required
-          type={showConfirmPassword ? 'text' : 'password'}
-          {...register('confirmPassword')}
-          className={`peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pr-12 pb-2 text-[#f9f8fa] transition-all outline-none ${
-            passwordsMatch === null || !confirmPasswordValue
-              ? 'focus:border-[#a240ff]'
-              : passwordsMatch
-                ? 'border-green-500'
-                : 'border-red-500'
-          }`}
-          placeholder=" "
-          id="confirm-password-input"
-        />
-        <label
-          htmlFor="confirm-password-input"
-          className={`absolute left-4 text-[#a392b3] transition-all ${
-            confirmPasswordValue
-              ? 'top-2 text-xs'
-              : 'top-1/2 -translate-y-1/2 text-base peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs'
-          }`}
-        >
-          Confirmar senha
-        </label>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={toggleShowConfirmPassword}
-                tabIndex={-1}
-                className="absolute top-1/2 right-4 -translate-y-1/2 text-[#a392b3] transition-colors hover:text-[#f9f8fa]"
-              >
-                {showConfirmPassword ? (
-                  <FaEyeSlash className="h-5 w-5" />
-                ) : (
-                  <FaEye className="h-5 w-5" />
-                )}
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{showPassword ? 'Ocultar senha' : 'Mostrar senha'}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        {passwordsMatch !== null && confirmPasswordValue && (
-          <span className="absolute top-1/2 right-12 -translate-y-1/2">
-            {passwordsMatch ? (
-              <FaCheckCircle className="h-5 w-5 text-green-500" />
-            ) : (
-              <FaTimesCircle className="h-5 w-5 text-red-500" />
-            )}
-          </span>
-        )}
-        {confirmPasswordError && (
-          <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
-            {confirmPasswordError}
-          </span>
         )}
       </div>
     </>

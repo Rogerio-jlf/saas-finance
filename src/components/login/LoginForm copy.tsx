@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { FaArrowRight, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { SiWebmoney } from 'react-icons/si';
-import '../styles/general.css';
+import '../../styles/general.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');

@@ -1,9 +1,9 @@
 import { UseFormRegister } from 'react-hook-form';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import { TypeSignUpFormSchema } from '../../schemas/signUpFormSchema';
+import { TypeLoginFormSchema } from '../../schemas/loginFormSchema';
 
 interface EmailInputProps {
-  register: UseFormRegister<TypeSignUpFormSchema>;
+  register: UseFormRegister<TypeLoginFormSchema>;
   value: string;
   isValid: boolean | null;
   error?: string;

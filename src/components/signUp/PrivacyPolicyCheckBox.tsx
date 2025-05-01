@@ -1,9 +1,9 @@
-import { SignUpSchema } from '@/schemas/signUpSchema';
+import { TypeSignUpFormSchema } from '@/schemas/signUpFormSchema';
 import Link from 'next/link';
 import { UseFormRegister } from 'react-hook-form';
 
 interface PrivacyPolicyCheckboxProps {
-  register: UseFormRegister<SignUpSchema>;
+  register: UseFormRegister<TypeSignUpFormSchema>;
   error?: string;
 }
 

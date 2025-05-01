@@ -1,42 +1,38 @@
 'use client';
 
+import {
+  loginFormSchema,
+  TypeLoginFormSchema,
+} from '@/schemas/loginFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  signUpFormSchema,
-  TypeSignUpFormSchema,
-} from '../../schemas/signUpFormSchema';
 import '../../styles/general.css';
 import { CardHeader } from './CardHeader';
 import { DividingLine } from './DividingLine';
 import { EmailInput } from './EmailInput';
-import { NameInput } from './NameInput';
-import { PasswordInputs } from './PasswordInputs';
-import { PrivacyPolicyCheckbox } from './PrivacyPolicyCheckBox';
+import { PasswordInput } from './PasswordInput';
 import { SubmitButton } from './SubmitButton';
 
-const SignUpForm = () => {
+const LoginForm = () => {
   const [output, setOutput] = useState('');
 
   const {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<TypeSignUpFormSchema>({
-    resolver: zodResolver(signUpFormSchema),
+  } = useForm<TypeLoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
   });
 
-  const nameValue = watch('name');
   const emailValue = watch('email');
   const isValidEmailValue = emailValue
     ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(emailValue)
     : null;
 
-  const handleSubmitCreateUser = (data: TypeSignUpFormSchema) => {
+  const handleSubmitLogin = (data: TypeLoginFormSchema) => {
     console.log('Form data:', data);
     setOutput(JSON.stringify(data, null, 2));
   };
@@ -45,11 +41,10 @@ const SignUpForm = () => {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#1e142c] to-[#2d1a3f] font-sans text-[#f9f8fa]">
       {/* Card */}
       <div className="w-full max-w-md overflow-hidden rounded-2xl bg-[rgba(15,10,20,0.8)] shadow-2xl backdrop-blur-xl">
-        {/* Cabeçalho do Card */}
-
+        {/* Cabeçalho do card */}
         <CardHeader
-          title="Crie sua conta"
-          subtitle="Aproveite todos os benefícios do nosso sistema"
+          title="Finan Flow"
+          subtitle="Faça login e domine suas finanças com inteligência"
         />
 
         {/* Formulário */}
@@ -57,18 +52,10 @@ const SignUpForm = () => {
           <form
             onSubmit={handleSubmit((data) => {
               console.log('Submitting form...');
-              handleSubmitCreateUser(data);
+              handleSubmitLogin(data);
             })}
             className="space-y-5"
           >
-            {/* Nome */}
-            <NameInput
-              register={register}
-              setValue={setValue}
-              value={nameValue}
-              error={errors.name?.message}
-            />
-
             {/* Email */}
             <EmailInput
               register={register}
@@ -77,24 +64,29 @@ const SignUpForm = () => {
               error={errors.email?.message}
             />
 
-            {/* Senha e Confirmar Senha */}
-            <PasswordInputs
+            {/* Senha */}
+            <PasswordInput
               register={register}
               watch={watch}
               passwordError={errors.password?.message}
-              confirmPasswordError={errors.confirmPassword?.message}
             />
 
-            {/* Checkbox de Aceitar Termos */}
-            <PrivacyPolicyCheckbox
-              register={register}
-              error={errors.acceptedTerms?.message}
-            />
+            {/* Link Esqueceu a senha */}
+            <div className="text-right">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-[#a240ff] transition-colors hover:text-[#b562ff]"
+              >
+                Esqueceu a senha?
+              </Link>
+            </div>
 
-            {/* Botão de Cadastro */}
-            <SubmitButton loading={isSubmitting}>Criar Conta</SubmitButton>
+            {/* Botão de Login */}
+
+            <SubmitButton loading={isSubmitting}>Login</SubmitButton>
           </form>
 
+          {/* Exibir saída do formulário */}
           {output && (
             <pre className="mt-4 max-w-md overflow-x-auto rounded bg-[#1f1b2c] p-4 text-sm text-white">
               {output}
@@ -104,15 +96,15 @@ const SignUpForm = () => {
           {/* Linha separadora */}
           <DividingLine />
 
-          {/* Link para login */}
+          {/* Link de criar conta */}
           <div className="text-center">
             <p className="text-sm text-[#a392b3]">
-              Já possui uma conta?{' '}
+              Não possui uma conta?{' '}
               <Link
-                href="/login"
+                href="/sign-up"
                 className="font-medium text-[#a240ff] transition-colors hover:text-[#b562ff]"
               >
-                Entre aqui!
+                Crie a sua aqui!
               </Link>
             </p>
           </div>
@@ -122,4 +114,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;

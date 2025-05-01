@@ -7,10 +7,10 @@
  */
 
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { SignUpSchema } from '../../schemas/signUpSchema';
+import { TypeSignUpFormSchema } from '../../schemas/signUpFormSchema';
 interface NameInputProps {
-  register: UseFormRegister<SignUpSchema>;
-  setValue: UseFormSetValue<SignUpSchema>;
+  register: UseFormRegister<TypeSignUpFormSchema>;
+  setValue: UseFormSetValue<TypeSignUpFormSchema>;
   value: string;
   error?: string;
 }
