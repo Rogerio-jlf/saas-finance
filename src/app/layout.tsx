@@ -1,6 +1,8 @@
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from 'next';
 import { Kodchasan, Poppins } from 'next/font/google';
 import '../styles/globals.css';
+
 
 const kodchasan = Kodchasan({
   variable: '--font-kodchasan',
@@ -28,6 +30,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} ${kodchasan.variable} antialiased`}>
         {children}
+        <Toaster
+          toastOptions={{
+            className: 'bg-[#251930] text-[#f9f8fa]',
+            duration: 3000,
+            style: {
+              background: '#251930',
+              color: '#f9f8fa',
+            },
+          }}
+          position="top-center"
+          />
       </body>
     </html>
   );

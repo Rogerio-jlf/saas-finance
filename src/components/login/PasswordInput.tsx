@@ -17,12 +17,14 @@ import { TypeLoginFormSchema } from '../../schemas/loginFormSchema';
 interface PasswordInputProps {
   register: UseFormRegister<TypeLoginFormSchema>;
   watch: UseFormWatch<TypeLoginFormSchema>;
+  isValid: boolean | null;
   passwordError?: string;
 }
 
 export function PasswordInput({
   register,
   watch,
+  isValid,
   passwordError,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -68,10 +70,17 @@ export function PasswordInput({
                 setPasswordFocused(false);
               }
             }}
-            className="peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pr-12 pb-2 text-[#f9f8fa] transition-all outline-none focus:border-[#a240ff]"
+            className={`peer h-14 w-full rounded-lg border-2 border-transparent bg-[#251930] px-4 pt-6 pr-12 pb-2 text-[#f9f8fa] transition-all outline-none ${
+              isValid === null
+                ? 'focus:border-[#a240ff]'
+                : isValid
+                  ? 'border-green-500 focus:border-green-500'
+                  : 'border-red-500 focus:border-red-500'
+            }`}
             placeholder=" "
             id="password-input"
           />
+
           <label
             htmlFor="password-input"
             className={`absolute left-4 text-[#a392b3] transition-all ${
@@ -82,6 +91,7 @@ export function PasswordInput({
           >
             Senha
           </label>
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -93,9 +103,25 @@ export function PasswordInput({
                   className="absolute top-1/2 right-4 -translate-y-1/2 text-[#a392b3] transition-colors hover:text-[#f9f8fa]"
                 >
                   {showPassword ? (
-                    <FaEyeSlash className="h-5 w-5" />
+                    <FaEyeSlash
+                      className={`h-5 w-5 ${
+                        isValid === null
+                          ? ''
+                          : isValid
+                            ? 'text-green-500'
+                            : 'text-red-500'
+                      }`}
+                    />
                   ) : (
-                    <FaEye className="h-5 w-5" />
+                    <FaEye
+                      className={`h-5 w-5 ${
+                        isValid === null
+                          ? ''
+                          : isValid
+                            ? 'text-green-500'
+                            : 'text-red-500'
+                      }`}
+                    />
                   )}
                 </button>
               </TooltipTrigger>
@@ -104,12 +130,21 @@ export function PasswordInput({
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+
+          {passwordError && (
+            <span className="absolute top-1/2 right-12 -translate-y-1/2 text-xs text-yellow-400">
+              {passwordError}
+            </span>
+          )}
         </div>
 
         {/* Requisitos da senha */}
         {(passwordFocused || passwordValue) && (
           <div className="mt-2 rounded-lg bg-[#251930] p-3">
-            <p className="mb-2 text-xs text-[#a392b3]">A senha deve conter:</p>
+            <p className="mb-2 text-xs text-white">
+              A senha é obrigatória e deve conter:
+            </p>
+
             <ul className="space-y-1 text-xs">
               <li className="flex items-center">
                 {passwordRequirements.hasMinLength ? (
@@ -127,6 +162,7 @@ export function PasswordInput({
                   No mínimo 8 caracteres
                 </span>
               </li>
+
               <li className="flex items-center">
                 {passwordRequirements.hasUpperCase ? (
                   <FaCheckCircle className="mr-2 h-3 w-3 text-green-500" />
@@ -143,6 +179,7 @@ export function PasswordInput({
                   Pelo menos uma letra maiúscula
                 </span>
               </li>
+
               <li className="flex items-center">
                 {passwordRequirements.hasLowerCase ? (
                   <FaCheckCircle className="mr-2 h-3 w-3 text-green-500" />
@@ -159,6 +196,7 @@ export function PasswordInput({
                   Pelo menos uma letra minúscula
                 </span>
               </li>
+
               <li className="flex items-center">
                 {passwordRequirements.hasNumber ? (
                   <FaCheckCircle className="mr-2 h-3 w-3 text-green-500" />
@@ -175,6 +213,7 @@ export function PasswordInput({
                   Pelo menos um número
                 </span>
               </li>
+
               <li className="flex items-center">
                 {passwordRequirements.hasSpecial ? (
                   <FaCheckCircle className="mr-2 h-3 w-3 text-green-500" />
@@ -193,9 +232,6 @@ export function PasswordInput({
               </li>
             </ul>
           </div>
-        )}
-        {passwordError && (
-          <span className="text-xs text-red-500">{passwordError}</span>
         )}
       </div>
     </>

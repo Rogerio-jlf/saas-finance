@@ -128,6 +128,7 @@ export function PasswordInputs({
             placeholder=" "
             id="password-input"
           />
+
           <label
             htmlFor="password-input"
             className={`absolute left-4 text-[#a392b3] transition-all ${
@@ -138,6 +139,7 @@ export function PasswordInputs({
           >
             Senha
           </label>
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

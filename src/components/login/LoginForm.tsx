@@ -6,8 +6,11 @@ import {
 } from '@/schemas/loginFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useState } from 'react';
+// import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from "sonner";
 import '../../styles/general.css';
 import { CardHeader } from './CardHeader';
 import { DividingLine } from './DividingLine';
@@ -15,9 +18,12 @@ import { EmailInput } from './EmailInput';
 import { PasswordInput } from './PasswordInput';
 import { SubmitButton } from './SubmitButton';
 
-const LoginForm = () => {
-  const [output, setOutput] = useState('');
 
+const LoginForm = () => {
+  // const [output, setOutput] = useState('');
+  const routerNavigation = useRouter();
+
+  
   const {
     register,
     handleSubmit,
@@ -27,15 +33,50 @@ const LoginForm = () => {
     resolver: zodResolver(loginFormSchema),
   });
 
+  // Retorna o valor do campo de email
   const emailValue = watch('email');
+  // Verifica se o valor do campo de email é válido
   const isValidEmailValue = emailValue
     ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(emailValue)
     : null;
 
-  const handleSubmitLogin = (data: TypeLoginFormSchema) => {
-    console.log('Form data:', data);
-    setOutput(JSON.stringify(data, null, 2));
-  };
+  // Retorna o valor do campo de senha
+  const passwordValue = watch('password');
+  // Verifica se o valor do campo de senha é válido
+  const isValidPasswordValue = passwordValue
+    ? passwordValue.length >= 8 &&
+      /[A-Z]/.test(passwordValue) &&
+      /[a-z]/.test(passwordValue) &&
+      /[0-9]/.test(passwordValue) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue)
+    : null;
+
+  // const handleSubmitLogin = (data: TypeLoginFormSchema) => {
+  //   console.log('Form data:', data);
+  //   setOutput(JSON.stringify(data, null, 2));
+  // };
+
+  // Chamada da função de login
+  async function handleSubmitLogin(
+    data: TypeLoginFormSchema,
+    event: React.FormEvent,
+  ) {
+    event.preventDefault();
+
+    const result = await signIn('credentials', {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (result?.ok) {
+      routerNavigation.push('/dashboard');
+    } else {
+      toast('Email ou senha inválidos. Verifique e tente novamente.');
+    }
+  }
+
+  //------------------------------------------------------------
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#1e142c] to-[#2d1a3f] font-sans text-[#f9f8fa]">
@@ -50,9 +91,9 @@ const LoginForm = () => {
         {/* Formulário */}
         <div className="p-8">
           <form
-            onSubmit={handleSubmit((data) => {
+            onSubmit={handleSubmit((data, event) => {
               console.log('Submitting form...');
-              handleSubmitLogin(data);
+              handleSubmitLogin(data, event as React.FormEvent);
             })}
             className="space-y-5"
           >
@@ -68,6 +109,7 @@ const LoginForm = () => {
             <PasswordInput
               register={register}
               watch={watch}
+              isValid={isValidPasswordValue}
               passwordError={errors.password?.message}
             />
 
@@ -82,16 +124,15 @@ const LoginForm = () => {
             </div>
 
             {/* Botão de Login */}
-
             <SubmitButton loading={isSubmitting}>Login</SubmitButton>
           </form>
 
           {/* Exibir saída do formulário */}
-          {output && (
+          {/* {output && (
             <pre className="mt-4 max-w-md overflow-x-auto rounded bg-[#1f1b2c] p-4 text-sm text-white">
               {output}
             </pre>
-          )}
+          )} */}
 
           {/* Linha separadora */}
           <DividingLine />

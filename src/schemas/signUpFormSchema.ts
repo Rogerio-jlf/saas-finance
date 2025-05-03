@@ -28,7 +28,7 @@ export const signUpFormSchema = z
         z
           .string()
           .regex(
-            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/,
             'Email inválido.',
           ),
       ),

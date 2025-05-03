@@ -31,16 +31,18 @@ export function EmailInput({
         placeholder=" "
         id="email-input"
       />
+
       <label
         htmlFor="email-input"
         className={`absolute left-4 text-[#a392b3] transition-all ${
           value
-            ? 'top-2 text-xs'
+            ? 'top-1 text-xs'
             : 'top-1/2 -translate-y-1/2 text-base peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs'
         }`}
       >
         Email
       </label>
+
       {isValid !== null && (
         <span className="absolute top-1/2 right-4 -translate-y-1/2">
           {isValid ? (
@@ -50,8 +52,9 @@ export function EmailInput({
           )}
         </span>
       )}
+
       {error && (
-        <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
+        <span className="absolute top-1/2 right-12 -translate-y-1/2 text-xs text-yellow-400">
           {error}
         </span>
       )}

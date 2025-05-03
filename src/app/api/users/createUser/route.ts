@@ -1,4 +1,4 @@
-import { createUserSchema } from '@/schemas/userSchema';
+import { signUpFormSchema } from '@/schemas/signUpFormSchema';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 import { prismaDatabase } from '../../../../lib/prisma';
@@ -6,7 +6,7 @@ import { prismaDatabase } from '../../../../lib/prisma';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const result = createUserSchema.safeParse(body);
+    const result = signUpFormSchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json(

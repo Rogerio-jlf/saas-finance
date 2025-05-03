@@ -49,6 +49,7 @@ export function NameInput({
         placeholder=" "
         id="name-input"
       />
+
       <label
         htmlFor="name-input"
         className={`absolute left-4 text-[#a392b3] transition-all ${
@@ -59,6 +60,7 @@ export function NameInput({
       >
         Nome completo
       </label>
+      
       {error && (
         <span className="absolute top-1/2 right-4 -translate-y-1/2 text-red-500">
           {error}
